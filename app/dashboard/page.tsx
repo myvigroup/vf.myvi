@@ -26,7 +26,7 @@ export default async function DashboardPage() {
 
   const { data: deals } = await supabase
     .from('deals')
-    .select('id, firma_name, deal_status, bereich, kontakt_email, erstellt_am')
+    .select('id, firma_name, deal_status, bereich, interesse_an, kundentyp, kontakt_email, erstellt_am')
     .order('erstellt_am', { ascending: false })
 
   const allDeals = deals ?? []
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
                   Kontakt
                 </th>
                 <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider hidden md:table-cell" style={{ color: 'var(--g400)' }}>
-                  Bereich
+                  Interesse
                 </th>
                 <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider" style={{ color: 'var(--g400)' }}>
                   Status
@@ -147,7 +147,7 @@ export default async function DashboardPage() {
                     {deal.kontakt_email ?? '—'}
                   </td>
                   <td className="px-3.5 py-3 text-xs hidden md:table-cell" style={{ color: 'var(--g500)' }}>
-                    {deal.bereich ?? '—'}
+                    {deal.interesse_an ?? '—'}
                   </td>
                   <td className="px-3.5 py-3">
                     <span

@@ -98,6 +98,8 @@ export default async function DealDetailPage({
             </div>
             <div className="divide-y" style={{ borderColor: 'var(--g50)' }}>
               {[
+                { label: 'Kundentyp', value: deal.kundentyp },
+                { label: 'Interesse an', value: deal.interesse_an },
                 { label: 'Kontakt E-Mail', value: deal.kontakt_email },
                 { label: 'Telefon', value: [deal.telefonnummer, deal.telefonnummer_2].filter(Boolean).join(' / ') || null },
                 { label: 'Bereich', value: deal.bereich },

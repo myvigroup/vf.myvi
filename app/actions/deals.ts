@@ -31,10 +31,11 @@ export async function createDeal(
   const telefonnummer_2 = formData.get('telefonnummer_2') as string
   const bereich = formData.get('bereich') as string
   const interesse_an = formData.get('interesse_an') as string
+  const kundentyp = formData.get('kundentyp') as string
   const notizen = formData.get('notizen') as string
 
   if (!firma_name) {
-    return { error: 'Firmenname ist erforderlich.' }
+    return { error: 'Name/Firmenname ist erforderlich.' }
   }
 
   const berater_name = profile?.name ?? user.email ?? 'Unbekannt'
@@ -48,6 +49,7 @@ export async function createDeal(
       telefonnummer_2: telefonnummer_2 || null,
       bereich: bereich || null,
       interesse_an: interesse_an || null,
+      kundentyp: kundentyp || null,
       notizen: notizen || null,
       berater_id: user.id,
       berater_name: berater_name,
