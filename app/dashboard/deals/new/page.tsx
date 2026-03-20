@@ -4,14 +4,11 @@ import { useActionState, useState } from 'react'
 import { createDeal, type DealState } from '@/app/actions/deals'
 import Link from 'next/link'
 
-const INTERESSEN = [
-  'mitNORM',
-  'Energy & Finance',
-  'mitNORM Firmenberatung',
-  'Karriere-Institut',
-  'WirPersonalberater',
-  'Mitarbeiterempfehlung',
-]
+const INTERESSEN_BY_TYP: Record<string, string[]> = {
+  Privatkunde: ['mitNORM', 'Energy & Finance', 'Karriere-Institut', 'WirPersonalberater'],
+  Firmenkunde: ['Energy & Finance', 'Karriere-Institut', 'WirPersonalberater', 'mitNORM Firmenberatung'],
+  Mitarbeiterempfehlung: ['Mitarbeiterempfehlung'],
+}
 
 const KUNDENTYPEN = [
   { value: 'Privatkunde', label: 'Privatkunde', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
@@ -84,7 +81,16 @@ export default function NewDealPage() {
                     name="kundentyp"
                     value={typ.value}
                     checked={kundentyp === typ.value}
-                    onChange={(e) => setKundentyp(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      setKundentyp(val)
+                      // Bei Mitarbeiterempfehlung direkt setzen, sonst zurücksetzen
+                      if (val === 'Mitarbeiterempfehlung') {
+                        setInteresse('Mitarbeiterempfehlung')
+                      } else {
+                        setInteresse('')
+                      }
+                    }}
                     className="sr-only"
                   />
                   <svg
@@ -105,24 +111,31 @@ export default function NewDealPage() {
             </div>
           </div>
 
-          {/* Interesse an */}
-          <div>
-            <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--g800)' }}>
-              Mein Kunde interessiert sich für:
-            </h2>
-            <select
-              name="interesse_an"
-              value={interesse}
-              onChange={(e) => setInteresse(e.target.value)}
-              className="block w-full px-3 py-2.5 text-sm rounded-lg"
-              style={{ border: '1.5px solid var(--g200)' }}
-            >
-              <option value="">— Interesse an —</option>
-              {INTERESSEN.map((i) => (
-                <option key={i} value={i}>{i}</option>
-              ))}
-            </select>
-          </div>
+          {/* Interesse an — nur zeigen wenn Kundentyp gewählt und nicht Mitarbeiterempfehlung */}
+          {kundentyp && kundentyp !== 'Mitarbeiterempfehlung' && (
+            <div>
+              <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--g800)' }}>
+                Mein Kunde interessiert sich für:
+              </h2>
+              <select
+                name="interesse_an"
+                value={interesse}
+                onChange={(e) => setInteresse(e.target.value)}
+                className="block w-full px-3 py-2.5 text-sm rounded-lg"
+                style={{ border: '1.5px solid var(--g200)' }}
+              >
+                <option value="">— Interesse an —</option>
+                {(INTERESSEN_BY_TYP[kundentyp] ?? []).map((i) => (
+                  <option key={i} value={i}>{i}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Hidden interesse_an für Mitarbeiterempfehlung */}
+          {kundentyp === 'Mitarbeiterempfehlung' && (
+            <input type="hidden" name="interesse_an" value="Mitarbeiterempfehlung" />
+          )}
 
           {/* Kundeninfos — erscheint nach Auswahl */}
           {kundentyp && interesse && (
