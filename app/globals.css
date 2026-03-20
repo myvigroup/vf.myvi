@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --primary: #8B1A2B;
-  --primary-dark: #6E1522;
-  --primary-light: #FDF2F4;
-  --accent: #2AABB3;
-  --accent-light: #E8F8F9;
+  --primary: #1BA5B5;
+  --primary-dark: #148D9B;
+  --primary-light: #E6F7F8;
+  --accent: #2D3E50;
+  --accent-light: #EDF1F5;
   --success: #00B67A;
   --success-light: #E6F9F1;
   --success-dark: #009963;
@@ -73,7 +73,7 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(139,26,43,.12) !important;
+  box-shadow: 0 0 0 3px rgba(27,165,181,.15) !important;
   outline: none;
 }
 

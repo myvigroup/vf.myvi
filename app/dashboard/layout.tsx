@@ -37,16 +37,8 @@ export default async function DashboardLayout({
         <div className="mx-auto max-w-[1400px] h-full flex items-center justify-between px-6">
           {/* Left: Logo + Nav */}
           <div className="flex items-center gap-5">
-            <Link href="/dashboard" className="flex items-center gap-2.5">
-              <div
-                className="flex items-center justify-center rounded-lg text-white font-bold text-xs"
-                style={{ width: 32, height: 32, background: 'var(--primary)' }}
-              >
-                VF
-              </div>
-              <span className="font-bold text-sm" style={{ color: 'var(--g900)' }}>
-                Value Factory
-              </span>
+            <Link href="/dashboard" className="flex items-center">
+              <img src="/logo.png" alt="Value Factory" style={{ height: 28 }} />
             </Link>
 
             <div

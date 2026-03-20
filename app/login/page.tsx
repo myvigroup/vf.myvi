@@ -13,12 +13,7 @@ export default function LoginPage() {
     <div className="flex min-h-full items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <div
-            className="mx-auto flex items-center justify-center rounded-2xl text-white font-bold text-lg mb-4"
-            style={{ width: 44, height: 44, background: 'var(--primary)' }}
-          >
-            VF
-          </div>
+          <img src="/logo.png" alt="Value Factory" className="mx-auto mb-4" style={{ height: 36 }} />
           <h1 className="text-xl font-bold" style={{ color: 'var(--g900)' }}>
             Willkommen zurück
           </h1>
