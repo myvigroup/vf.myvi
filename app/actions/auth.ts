@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 
 export type AuthState = {
@@ -49,8 +50,11 @@ export async function register(
     return { error: 'Passwort muss mindestens 8 Zeichen lang sein.' }
   }
 
+  // Admin-Client für RLS-freie Abfragen (User ist noch nicht eingeloggt)
+  const adminClient = createAdminClient()
+
   // Einladungscode prüfen
-  const { data: invitation, error: codeError } = await supabase
+  const { data: invitation, error: codeError } = await adminClient
     .from('invitation_codes')
     .select('*')
     .eq('code', code)
@@ -86,8 +90,8 @@ export async function register(
     return { error: 'Registrierung fehlgeschlagen.' }
   }
 
-  // Profil in public.users anlegen
-  const { error: profileError } = await supabase.from('users').insert({
+  // Profil in public.users anlegen (admin client wegen RLS)
+  const { error: profileError } = await adminClient.from('users').insert({
     id: authData.user.id,
     email,
     name,
@@ -100,7 +104,7 @@ export async function register(
   }
 
   // Einladungscode used_count hochzählen
-  await supabase
+  await adminClient
     .from('invitation_codes')
     .update({ used_count: invitation.used_count + 1 })
     .eq('id', invitation.id)
