@@ -4,7 +4,7 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
 }
 
-const FROM_EMAIL = process.env.EMAIL_FROM ?? 'MYVI Dialog <noreply@vf.myvi.de>'
+const FROM_EMAIL = process.env.EMAIL_FROM ?? 'Value Factory <noreply@vf.myvi.de>'
 
 export async function sendStatusChangeEmail({
   to,
@@ -37,7 +37,7 @@ der Status Ihres Deals "${firmaName}" wurde aktualisiert:
 Schauen Sie im Dashboard nach:
 ${process.env.NEXT_PUBLIC_APP_URL}/dashboard
 
-Ihr MYVI Team`,
+Ihr Value Factory Team`,
   })
 }
 
@@ -73,6 +73,6 @@ ein neuer Deal wurde eingereicht:
 
 Bitte prüfen Sie den Deal in der SharePoint-Liste.
 
-Ihr MYVI System`,
+Ihr Value Factory System`,
   })
 }

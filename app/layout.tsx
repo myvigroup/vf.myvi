@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MYVI Dialog",
+  title: "Value Factory",
   description: "Berater-Dashboard für Firmenkontakte",
 };
 

@@ -17,7 +17,7 @@ export default function RegisterPage() {
             className="mx-auto flex items-center justify-center rounded-2xl text-white font-bold text-lg mb-4"
             style={{ width: 44, height: 44, background: 'var(--primary)' }}
           >
-            M
+            VF
           </div>
           <h1 className="text-xl font-bold" style={{ color: 'var(--g900)' }}>
             Konto erstellen

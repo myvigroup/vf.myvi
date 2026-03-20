@@ -8,11 +8,11 @@ export default function Home() {
           className="mx-auto flex items-center justify-center rounded-2xl text-white font-bold text-2xl"
           style={{ width: 56, height: 56, background: 'var(--primary)' }}
         >
-          M
+          VF
         </div>
         <div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--g900)' }}>
-            MYVI Dialog
+            Value Factory
           </h1>
           <p className="mt-1 text-sm" style={{ color: 'var(--g400)' }}>
             Berater-Dashboard für Firmenkontakte

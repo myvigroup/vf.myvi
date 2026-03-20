@@ -42,10 +42,10 @@ export default async function DashboardLayout({
                 className="flex items-center justify-center rounded-lg text-white font-bold text-xs"
                 style={{ width: 32, height: 32, background: 'var(--primary)' }}
               >
-                M
+                VF
               </div>
               <span className="font-bold text-sm" style={{ color: 'var(--g900)' }}>
-                MYVI Dialog
+                Value Factory
               </span>
             </Link>
 
