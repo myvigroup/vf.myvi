@@ -16,11 +16,14 @@ export function CommentForm({ dealId }: { dealId: string }) {
   }, [state.success])
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-3">
+    <form ref={formRef} action={formAction} className="space-y-2 mt-3">
       <input type="hidden" name="deal_id" value={dealId} />
 
       {state.error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+        <div
+          className="p-3 text-xs font-semibold rounded-lg"
+          style={{ background: 'var(--danger-light)', color: '#B91C1C' }}
+        >
           {state.error}
         </div>
       )}
@@ -30,13 +33,15 @@ export function CommentForm({ dealId }: { dealId: string }) {
         rows={3}
         required
         placeholder="Kommentar schreiben..."
-        className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className="block w-full px-3 py-2.5 text-sm rounded-lg resize-none"
+        style={{ border: '1.5px solid var(--g200)' }}
       />
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 rounded-lg text-xs font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ background: 'var(--primary)' }}
       >
         {pending ? 'Wird gesendet...' : 'Kommentar senden'}
       </button>

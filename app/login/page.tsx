@@ -11,63 +11,80 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-full items-center justify-center px-4 py-12">
-      <div className="w-full max-w-sm space-y-8">
+      <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">
-            MYVI Dialog
+          <div
+            className="mx-auto flex items-center justify-center rounded-2xl text-white font-bold text-lg mb-4"
+            style={{ width: 44, height: 44, background: 'var(--primary)' }}
+          >
+            M
+          </div>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--g900)' }}>
+            Willkommen zurück
           </h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-1 text-xs" style={{ color: 'var(--g400)' }}>
             Melden Sie sich in Ihrem Berater-Dashboard an
           </p>
         </div>
 
-        <form action={formAction} className="space-y-5">
-          {state.error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
-              {state.error}
+        <div
+          className="bg-white p-6"
+          style={{ borderRadius: 'var(--r-lg)', border: '1px solid var(--g100)', boxShadow: 'var(--shadow-sm)' }}
+        >
+          <form action={formAction} className="space-y-4">
+            {state.error && (
+              <div
+                className="p-3 text-xs font-semibold rounded-lg"
+                style={{ background: 'var(--danger-light)', color: '#B91C1C' }}
+              >
+                {state.error}
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="email" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>
+                E-Mail
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className="block w-full px-3 py-2.5 text-sm rounded-lg"
+                style={{ border: '1.5px solid var(--g200)' }}
+              />
             </div>
-          )}
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-              E-Mail
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </div>
+            <div>
+              <label htmlFor="password" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>
+                Passwort
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                className="block w-full px-3 py-2.5 text-sm rounded-lg"
+                style={{ border: '1.5px solid var(--g200)' }}
+              />
+            </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Passwort
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </div>
+            <button
+              type="submit"
+              disabled={pending}
+              className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'var(--primary)' }}
+            >
+              {pending ? 'Wird angemeldet...' : 'Anmelden'}
+            </button>
+          </form>
+        </div>
 
-          <button
-            type="submit"
-            disabled={pending}
-            className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {pending ? 'Wird angemeldet...' : 'Anmelden'}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-xs" style={{ color: 'var(--g400)' }}>
           Noch kein Konto?{' '}
-          <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link href="/register" className="font-semibold" style={{ color: 'var(--primary)' }}>
             Registrieren
           </Link>
         </p>

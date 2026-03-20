@@ -14,66 +14,57 @@ export function NewCodeForm() {
   }, [state.success])
 
   return (
-    <form ref={formRef} action={formAction} className="mt-4 space-y-4">
+    <form ref={formRef} action={formAction} className="space-y-3">
       {state.error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+        <div className="p-3 text-xs font-semibold rounded-lg" style={{ background: 'var(--danger-light)', color: '#B91C1C' }}>
           {state.error}
         </div>
       )}
       {state.success && (
-        <div className="rounded-md bg-green-50 p-3 text-sm text-green-700 border border-green-200">
+        <div className="p-3 text-xs font-semibold rounded-lg" style={{ background: 'var(--success-light)', color: '#15803D' }}>
           Code erfolgreich erstellt.
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <div>
-          <label htmlFor="code" className="block text-sm font-medium">Code *</label>
+          <label htmlFor="code" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>Code *</label>
           <input
-            id="code"
-            name="code"
-            type="text"
-            required
-            placeholder="z.B. VF-2026"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm uppercase shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            id="code" name="code" type="text" required placeholder="z.B. VF-2026"
+            className="block w-full px-3 py-2 text-sm rounded-lg uppercase"
+            style={{ border: '1.5px solid var(--g200)' }}
           />
         </div>
         <div>
-          <label htmlFor="label" className="block text-sm font-medium">Label</label>
+          <label htmlFor="label" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>Label</label>
           <input
-            id="label"
-            name="label"
-            type="text"
-            placeholder="z.B. Kampagne März"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            id="label" name="label" type="text" placeholder="Kampagne März"
+            className="block w-full px-3 py-2 text-sm rounded-lg"
+            style={{ border: '1.5px solid var(--g200)' }}
           />
         </div>
         <div>
-          <label htmlFor="max_uses" className="block text-sm font-medium">Max. Nutzungen</label>
+          <label htmlFor="max_uses" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>Max. Nutzungen</label>
           <input
-            id="max_uses"
-            name="max_uses"
-            type="number"
-            min={1}
-            defaultValue={10}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            id="max_uses" name="max_uses" type="number" min={1} defaultValue={10}
+            className="block w-full px-3 py-2 text-sm rounded-lg"
+            style={{ border: '1.5px solid var(--g200)' }}
           />
         </div>
         <div>
-          <label htmlFor="expires_at" className="block text-sm font-medium">Ablaufdatum</label>
+          <label htmlFor="expires_at" className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--g600)' }}>Ablaufdatum</label>
           <input
-            id="expires_at"
-            name="expires_at"
-            type="date"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            id="expires_at" name="expires_at" type="date"
+            className="block w-full px-3 py-2 text-sm rounded-lg"
+            style={{ border: '1.5px solid var(--g200)' }}
           />
         </div>
       </div>
 
       <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+        type="submit" disabled={pending}
+        className="px-4 py-2 rounded-lg text-xs font-semibold text-white disabled:opacity-50"
+        style={{ background: 'var(--primary)' }}
       >
         {pending ? 'Wird erstellt...' : 'Code erstellen'}
       </button>

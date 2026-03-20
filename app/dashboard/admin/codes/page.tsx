@@ -12,44 +12,60 @@ export default async function AdminCodesPage() {
     .order('created_at', { ascending: false })
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <Link href="/dashboard/admin" className="text-sm text-gray-500 hover:text-gray-700">
-        &larr; Admin
+    <>
+      <Link
+        href="/dashboard/admin"
+        className="inline-flex items-center gap-1 text-xs font-semibold mb-4"
+        style={{ color: 'var(--g400)' }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Admin
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">Einladungscodes</h1>
 
-      {/* Neuen Code erstellen */}
-      <div className="mt-6 rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-sm font-semibold uppercase text-gray-500">Neuen Code erstellen</h2>
+      <h1 className="text-xl font-bold mb-4" style={{ color: 'var(--g900)' }}>
+        Einladungscodes
+      </h1>
+
+      {/* New Code Form */}
+      <div
+        className="bg-white p-5 mb-4"
+        style={{ borderRadius: 'var(--r-md)', border: '1px solid var(--g100)' }}
+      >
+        <h2 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--g400)' }}>
+          Neuen Code erstellen
+        </h2>
         <NewCodeForm />
       </div>
 
-      {/* Code-Liste */}
-      <div className="mt-6 overflow-hidden rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nutzung</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ablauf</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+      {/* Codes Table */}
+      <div
+        className="bg-white overflow-hidden"
+        style={{ borderRadius: 'var(--r-md)', border: '1px solid var(--g100)' }}
+      >
+        <table className="w-full">
+          <thead>
+            <tr style={{ borderBottom: '1px solid var(--g100)' }}>
+              <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider" style={{ color: 'var(--g400)' }}>Code</th>
+              <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider hidden sm:table-cell" style={{ color: 'var(--g400)' }}>Label</th>
+              <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider" style={{ color: 'var(--g400)' }}>Nutzung</th>
+              <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider hidden sm:table-cell" style={{ color: 'var(--g400)' }}>Ablauf</th>
+              <th className="px-3.5 py-3 text-left text-[0.72rem] font-bold uppercase tracking-wider" style={{ color: 'var(--g400)' }}>Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody>
             {codes?.map((c) => (
-              <tr key={c.id} className={c.aktiv ? '' : 'opacity-50'}>
-                <td className="px-4 py-3 text-sm font-mono font-medium">{c.code}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">{c.label ?? '—'}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">
+              <tr key={c.id} className={c.aktiv ? '' : 'opacity-50'} style={{ borderBottom: '1px solid var(--g50)' }}>
+                <td className="px-3.5 py-3 text-sm font-mono font-bold" style={{ color: 'var(--g800)' }}>{c.code}</td>
+                <td className="px-3.5 py-3 text-xs hidden sm:table-cell" style={{ color: 'var(--g500)' }}>{c.label ?? '—'}</td>
+                <td className="px-3.5 py-3 text-xs" style={{ color: 'var(--g500)' }}>
                   {c.used_count} / {c.max_uses}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-500">
-                  {c.expires_at
-                    ? new Date(c.expires_at).toLocaleDateString('de-DE')
-                    : '—'}
+                <td className="px-3.5 py-3 text-xs hidden sm:table-cell" style={{ color: 'var(--g500)' }}>
+                  {c.expires_at ? new Date(c.expires_at).toLocaleDateString('de-DE') : '—'}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-3.5 py-3">
                   <CodeToggle codeId={c.id} aktiv={c.aktiv} />
                 </td>
               </tr>
@@ -57,6 +73,6 @@ export default async function AdminCodesPage() {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   )
 }

@@ -3,12 +3,13 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <div className="flex min-h-full items-center justify-center px-4">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-gray-300">404</h1>
-        <p className="text-gray-500">Seite nicht gefunden.</p>
+      <div className="text-center space-y-3">
+        <div className="text-5xl font-bold" style={{ color: 'var(--g200)' }}>404</div>
+        <p className="text-sm" style={{ color: 'var(--g400)' }}>Seite nicht gefunden.</p>
         <Link
           href="/dashboard"
-          className="inline-block text-sm font-medium text-blue-600 hover:text-blue-500"
+          className="inline-block text-sm font-semibold"
+          style={{ color: 'var(--primary)' }}
         >
           Zum Dashboard &rarr;
         </Link>

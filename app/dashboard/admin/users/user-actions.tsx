@@ -30,16 +30,17 @@ export function UserActions({
           const form = e.target.closest('form')
           if (form) form.requestSubmit()
         }}
-        className="rounded border border-gray-300 px-2 py-1 text-xs focus:border-blue-500 focus:outline-none disabled:opacity-50"
+        className="px-2 py-1 text-xs font-semibold rounded-md disabled:opacity-50"
+        style={{ border: '1.5px solid var(--g200)', color: 'var(--g600)' }}
       >
         {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
+          <option key={o} value={o}>{o}</option>
         ))}
       </select>
       {state.error && (
-        <span className="text-xs text-red-600">{state.error}</span>
+        <span className="text-[0.68rem] font-semibold" style={{ color: 'var(--danger)' }}>
+          {state.error}
+        </span>
       )}
     </form>
   )

@@ -15,15 +15,15 @@ export function CodeToggle({ codeId, aktiv }: { codeId: string; aktiv: boolean }
       <button
         type="submit"
         disabled={pending}
-        className={`rounded-full px-3 py-0.5 text-xs font-medium transition-colors disabled:opacity-50 ${
-          aktiv
-            ? 'bg-green-50 text-green-700 hover:bg-green-100'
-            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-        }`}
+        className="px-3 py-0.5 rounded-full text-[0.72rem] font-bold transition-colors disabled:opacity-50"
+        style={{
+          background: aktiv ? 'var(--success-light)' : 'var(--g100)',
+          color: aktiv ? '#15803D' : 'var(--g500)',
+        }}
       >
         {aktiv ? 'Aktiv' : 'Inaktiv'}
       </button>
-      {state.error && <span className="text-xs text-red-600">{state.error}</span>}
+      {state.error && <span className="text-[0.68rem]" style={{ color: 'var(--danger)' }}>{state.error}</span>}
     </form>
   )
 }
