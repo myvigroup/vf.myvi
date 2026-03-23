@@ -140,9 +140,11 @@ const MOCK_DEALS: SharePointDeal[] = [
   },
 ]
 
-// --- Deals fetching with Next.js fetch cache ---
+// --- Deals fetching with server-side cache ---
 
-async function getAllDeals(): Promise<SharePointDeal[]> {
+import { unstable_cache } from "next/cache"
+
+async function fetchAllDealsFromSharePoint(): Promise<SharePointDeal[]> {
   const token = await getAppToken()
 
   let allItems: SharePointDeal[] = []
@@ -154,7 +156,7 @@ async function getAllDeals(): Promise<SharePointDeal[]> {
         Authorization: `Bearer ${token}`,
         Prefer: "HonorNonIndexedQueriesWarningMayFailRandomly",
       },
-      next: { revalidate: 300 }, // cache for 5 minutes
+      cache: "no-store",
     })
 
     if (!response.ok) break
@@ -167,6 +169,12 @@ async function getAllDeals(): Promise<SharePointDeal[]> {
 
   return allItems
 }
+
+const getAllDeals = unstable_cache(
+  fetchAllDealsFromSharePoint,
+  ["sharepoint-deals"],
+  { revalidate: 300 } // cache for 5 minutes
+)
 
 /**
  * Fetches all deals from the SharePoint list where Berater matches the given email.
