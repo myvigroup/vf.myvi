@@ -32,8 +32,8 @@ export default async function AdminLayout({
             gap: 10,
           }}
         >
-          <Link href="/admin/dashboard" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/logo.png" alt="MYVI" style={{ height: 24, filter: 'brightness(2)' }} />
+          <Link href="/admin/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em' }}>Value Factory</span>
           </Link>
           <span
             style={{
