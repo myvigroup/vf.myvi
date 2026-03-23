@@ -84,3 +84,23 @@ input:focus, select:focus, textarea:focus {
 .badge-gewonnen { background: var(--success-light); color: #15803D; }
 .badge-verloren { background: var(--danger-light); color: #B91C1C; }
 .badge-storniert { background: var(--g100); color: var(--g500); }
+
+/* Login page buttons */
+.login-btn-primary { background: #30bcdf; }
+.login-btn-primary:hover { background: #27a8c9; }
+
+.login-btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #94a3b8;
+}
+.login-btn-secondary:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: white;
+}
+
+/* Dark input focus override */
+.login-input:focus {
+  border-color: #30bcdf !important;
+  box-shadow: 0 0 0 3px rgba(48,188,223,.15) !important;
+}

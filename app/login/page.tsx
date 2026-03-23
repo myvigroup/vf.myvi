@@ -114,7 +114,7 @@ export default function LoginPage() {
                 required
                 autoComplete="email"
                 placeholder="name@beispiel.de"
-                className="block w-full text-sm"
+                className="block w-full text-sm login-input"
                 style={{
                   background: '#161c2d',
                   border: '1px solid rgba(255,255,255,0.08)',
@@ -146,7 +146,7 @@ export default function LoginPage() {
                 type="password"
                 required
                 autoComplete="current-password"
-                className="block w-full text-sm"
+                className="block w-full text-sm login-input"
                 style={{
                   background: '#161c2d',
                   border: '1px solid rgba(255,255,255,0.08)',
@@ -160,16 +160,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={pending}
-              className="w-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                background: '#30bcdf',
-                borderRadius: 8,
-                padding: 12,
-                fontWeight: 600,
-                fontSize: 15,
-              }}
-              onMouseOver={(e) => !pending && (e.currentTarget.style.background = '#27a8c9')}
-              onMouseOut={(e) => !pending && (e.currentTarget.style.background = '#30bcdf')}
+              className="w-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed login-btn-primary"
+              style={{ borderRadius: 8, padding: 12, fontWeight: 600, fontSize: 15 }}
             >
               {pending ? 'Wird angemeldet...' : 'Anmelden'}
             </button>
@@ -184,24 +176,8 @@ export default function LoginPage() {
 
           <Link
             href="/register"
-            className="block w-full text-center transition-colors"
-            style={{
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: 8,
-              padding: 12,
-              color: '#94a3b8',
-              fontWeight: 600,
-              fontSize: 15,
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
-              e.currentTarget.style.color = 'white'
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
-              e.currentTarget.style.color = '#94a3b8'
-            }}
+            className="block w-full text-center transition-colors login-btn-secondary"
+            style={{ borderRadius: 8, padding: 12, fontWeight: 600, fontSize: 15 }}
           >
             Registrieren
           </Link>
