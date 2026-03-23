@@ -112,6 +112,59 @@ export async function register(
   redirect('/dashboard')
 }
 
+export async function resetPassword(
+  _prevState: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const supabase = await createClient()
+
+  const email = formData.get('email') as string
+
+  if (!email) {
+    return { error: 'Bitte E-Mail-Adresse eingeben.' }
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://vf.myvi.de'}/auth/reset`,
+  })
+
+  if (error) {
+    return { error: 'Fehler beim Senden der E-Mail. Bitte versuchen Sie es erneut.' }
+  }
+
+  return { success: true }
+}
+
+export async function updatePassword(
+  _prevState: AuthState,
+  formData: FormData
+): Promise<AuthState> {
+  const supabase = await createClient()
+
+  const password = formData.get('password') as string
+  const passwordConfirm = formData.get('password_confirm') as string
+
+  if (!password || !passwordConfirm) {
+    return { error: 'Bitte beide Felder ausfüllen.' }
+  }
+
+  if (password.length < 8) {
+    return { error: 'Passwort muss mindestens 8 Zeichen lang sein.' }
+  }
+
+  if (password !== passwordConfirm) {
+    return { error: 'Passwörter stimmen nicht überein.' }
+  }
+
+  const { error } = await supabase.auth.updateUser({ password })
+
+  if (error) {
+    return { error: 'Passwort konnte nicht geändert werden.' }
+  }
+
+  redirect('/dashboard')
+}
+
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
