@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getAllDealsAdmin } from '@/lib/sharepoint'
 import { BeraterTable } from './berater-table'
 import { ExcelImport } from './excel-import'
+import { AddBeraterForm } from './add-berater-form'
 
 export default async function AdminBeraterPage() {
   const supabase = createAdminClient()
@@ -35,7 +36,10 @@ export default async function AdminBeraterPage() {
         <h1 className="text-xl font-bold" style={{ color: 'var(--g900)' }}>
           Berater verwalten
         </h1>
-        <ExcelImport />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <AddBeraterForm />
+          <ExcelImport />
+        </div>
       </div>
 
       <BeraterTable

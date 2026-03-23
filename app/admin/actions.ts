@@ -64,6 +64,61 @@ export async function deactivateCode(codeId: string) {
   revalidatePath('/admin/einladungen')
 }
 
+export async function addSingleBerater(
+  formData: FormData
+): Promise<{ success?: boolean; error?: string }> {
+  await requireAdmin()
+
+  const name = (formData.get('name') as string)?.trim()
+  const email = (formData.get('email') as string)?.trim().toLowerCase()
+  const vermittlerNr = (formData.get('vermittler_nr') as string)?.trim() || null
+
+  if (!name || !email) {
+    return { error: 'Name und E-Mail sind erforderlich.' }
+  }
+
+  const supabase = createAdminClient()
+
+  // Check if email already exists
+  const { data: existing } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', email)
+    .maybeSingle()
+
+  if (existing) {
+    return { error: 'Ein Berater mit dieser E-Mail existiert bereits.' }
+  }
+
+  // Create auth user
+  const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+    email,
+    email_confirm: false,
+    user_metadata: { name },
+  })
+
+  if (authError || !authUser.user) {
+    return { error: `Auth-Fehler: ${authError?.message ?? 'Unbekannt'}` }
+  }
+
+  // Insert into users table
+  const { error } = await supabase.from('users').insert({
+    id: authUser.user.id,
+    email,
+    name,
+    vermittler_nr: vermittlerNr,
+    rolle: 'berater',
+    status: 'eingeladen',
+  })
+
+  if (error) {
+    return { error: `Profil-Fehler: ${error.message}` }
+  }
+
+  revalidatePath('/admin/berater')
+  return { success: true }
+}
+
 export async function importBerater(
   rows: { name: string; email: string; vermittlerNr: string | null }[]
 ) {
