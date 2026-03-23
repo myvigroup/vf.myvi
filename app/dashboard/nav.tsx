@@ -89,7 +89,7 @@ export default async function DashboardNav({
       </a>
       <div style={{ width: 1, height: 16, background: 'var(--g200)' }} />
       <Link
-        href="/ressourcen/ef-produkte"
+        href="/dashboard/ressourcen/ef-produkte"
         className="px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
         style={{ color: 'var(--g600)' }}
       >
