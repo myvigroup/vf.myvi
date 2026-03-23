@@ -78,13 +78,15 @@ export default async function DashboardNav({
       >
         Deals
       </Link>
-      <Link
-        href="/dashboard/deals/new"
+      <a
+        href={`https://ud.myvi.de/?berater=${encodeURIComponent(user.email ?? '')}`}
+        target="_blank"
+        rel="noopener noreferrer"
         className="px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
         style={{ color: 'var(--g600)' }}
       >
         Neuer Deal
-      </Link>
+      </a>
       {isAdmin && (
         <Link
           href="/dashboard/admin"
