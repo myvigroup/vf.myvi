@@ -89,7 +89,7 @@ export default async function DashboardNav({
       </a>
       {isAdmin && (
         <Link
-          href="/dashboard/admin"
+          href="/admin"
           className="px-3 py-1.5 rounded-md text-xs font-semibold transition-colors"
           style={{ color: 'var(--g600)' }}
         >
