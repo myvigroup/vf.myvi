@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { addComment, getDealById } from '@/lib/sharepoint'
+import { sendCommentNotificationToFB } from '@/lib/email/resend'
 import { revalidatePath } from 'next/cache'
 
 export type CommentState = {
@@ -46,6 +47,17 @@ export async function submitComment(
 
   if (!success) {
     return { error: 'Kommentar konnte nicht gespeichert werden. Power Automate Flow ist noch nicht konfiguriert.' }
+  }
+
+  // Mail 2: Notify Firmenberater (fire-and-forget)
+  if (deal.Deal_Besitzer) {
+    sendCommentNotificationToFB(
+      deal.Deal_Besitzer, // E-Mail or name — resolved in the email function
+      beraterName,
+      deal.Title,
+      comment,
+      dealId
+    ).catch(() => {})
   }
 
   revalidatePath(`/dashboard/${dealId}`)
