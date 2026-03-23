@@ -15,10 +15,10 @@ export default function LoginPage() {
       <div
         className="hidden md:flex md:w-[60%] flex-col justify-between p-10"
         style={{
-          background: '#0a0d14',
+          background: '#ffffff',
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+            linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
           `,
           backgroundSize: '60px 60px',
         }}
@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div style={{ maxWidth: 480 }}>
           <h1
             className="leading-tight"
-            style={{ fontSize: 36, fontWeight: 600, color: 'white' }}
+            style={{ fontSize: 36, fontWeight: 600, color: '#0a0d14' }}
           >
             Deine Deals.<br />
             Jederzeit im Blick.
