@@ -140,18 +140,19 @@ const MOCK_DEALS: SharePointDeal[] = [
   },
 ]
 
-/**
- * Fetches all deals from the SharePoint list where Berater matches the given email.
- */
-export async function getDealsByBerater(email: string): Promise<SharePointDeal[]> {
-  if (USE_MOCK) {
-    return MOCK_DEALS.filter(d => d.Berater.toLowerCase() === email.toLowerCase())
+// --- Deals Cache (avoid fetching all items on every request) ---
+
+const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+let dealsCache: { items: SharePointDeal[]; expiresAt: number } | null = null
+
+async function getAllDeals(): Promise<SharePointDeal[]> {
+  if (dealsCache && Date.now() < dealsCache.expiresAt) {
+    return dealsCache.items
   }
 
   const token = await getAppToken()
   const client = getGraphClient(token)
 
-  // BeraterE-Mail is not indexed, so we fetch all items and filter client-side
   let allItems: SharePointDeal[] = []
   let nextLink: string | undefined = `/sites/${SITE_ID}/lists/${LIST_ID}/items?$expand=fields&$top=200`
 
@@ -166,6 +167,20 @@ export async function getDealsByBerater(email: string): Promise<SharePointDeal[]
     nextLink = response["@odata.nextLink"]
   }
 
+  dealsCache = { items: allItems, expiresAt: Date.now() + CACHE_TTL }
+  return allItems
+}
+
+/**
+ * Fetches all deals from the SharePoint list where Berater matches the given email.
+ */
+export async function getDealsByBerater(email: string): Promise<SharePointDeal[]> {
+  if (USE_MOCK) {
+    return MOCK_DEALS.filter(d => d.Berater.toLowerCase() === email.toLowerCase())
+  }
+
+  const allItems = await getAllDeals()
+
   return allItems
     .filter(d => d.Berater.toLowerCase() === email.toLowerCase())
     .sort((a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime())
@@ -173,12 +188,19 @@ export async function getDealsByBerater(email: string): Promise<SharePointDeal[]
 
 /**
  * Fetches a single deal by its SharePoint list item ID.
+ * Uses the cached list when available, falls back to direct API call.
  */
 export async function getDealById(id: string): Promise<SharePointDeal | null> {
   if (USE_MOCK) {
     return MOCK_DEALS.find(d => d.id === id) ?? null
   }
 
+  // Try cache first
+  const allItems = await getAllDeals()
+  const cached = allItems.find(d => d.id === id)
+  if (cached) return cached
+
+  // Fallback: direct API call for items not in cache
   const token = await getAppToken()
   const client = getGraphClient(token)
 
