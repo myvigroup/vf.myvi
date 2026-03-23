@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 
 export async function requireAdmin() {
@@ -7,7 +8,9 @@ export async function requireAdmin() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
+  // Use admin client to bypass RLS when reading rolle
+  const adminClient = createAdminClient()
+  const { data: profile } = await adminClient
     .from('users')
     .select('rolle')
     .eq('id', user.id)
