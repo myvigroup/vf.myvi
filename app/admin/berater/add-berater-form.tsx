@@ -99,17 +99,6 @@ export function AddBeraterForm() {
             style={{ border: '1.5px solid var(--g200)', width: 240 }}
           />
         </div>
-        <div>
-          <label className="block text-[0.68rem] font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--g400)' }}>
-            Vermittler-Nr.
-          </label>
-          <input
-            name="vermittler_nr"
-            placeholder="z.B. 97794"
-            className="px-3 py-2 text-sm rounded-lg"
-            style={{ border: '1.5px solid var(--g200)', width: 140 }}
-          />
-        </div>
         <button
           type="submit"
           disabled={pending}
