@@ -170,11 +170,28 @@ async function fetchAllDealsFromSharePoint(): Promise<SharePointDeal[]> {
   return allItems
 }
 
-const getAllDeals = unstable_cache(
+export const getAllDeals = unstable_cache(
   fetchAllDealsFromSharePoint,
   ["sharepoint-deals"],
   { revalidate: 300 } // cache for 5 minutes
 )
+
+/**
+ * Returns all deals from SharePoint (or mock data in dev).
+ * Used by the admin panel.
+ */
+export async function getAllDealsAdmin(): Promise<SharePointDeal[]> {
+  if (USE_MOCK) {
+    return MOCK_DEALS.sort(
+      (a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime()
+    )
+  }
+
+  const allItems = await getAllDeals()
+  return allItems.sort(
+    (a, b) => new Date(b.Created).getTime() - new Date(a.Created).getTime()
+  )
+}
 
 /**
  * Fetches all deals from the SharePoint list where Berater matches the given email.
@@ -309,7 +326,7 @@ export async function getComments(dealId: string): Promise<DealComment[]> {
         author = prefixMatch[1]
         text = text.slice(prefixMatch[0].length)
       } else if (isFromDashboard) {
-        author = "VF Berater"
+        author = "MYVI Berater"
       }
 
       return {

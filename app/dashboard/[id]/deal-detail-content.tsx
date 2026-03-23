@@ -138,7 +138,7 @@ export default async function DealDetailContent({ id }: { id: string }) {
                         className="text-[0.62rem] font-bold px-1.5 py-0.5 rounded"
                         style={{ background: 'var(--primary)', color: 'white' }}
                       >
-                        VF Berater
+                        MYVI Berater
                       </span>
                     )}
                     <span className="text-[0.68rem]" style={{ color: 'var(--g400)' }}>
