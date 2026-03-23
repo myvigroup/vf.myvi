@@ -98,14 +98,22 @@ export default async function DealDetailPage({
             </div>
             <div className="divide-y" style={{ borderColor: 'var(--g50)' }}>
               {[
-                { label: 'Kundentyp', value: deal.kundentyp },
-                { label: 'Interesse an', value: deal.interesse_an },
+                { label: 'Ansprechpartner', value: deal.ansprechpartner },
+                { label: 'Branche', value: deal.branche },
                 { label: 'Kontakt E-Mail', value: deal.kontakt_email },
                 { label: 'Telefon', value: [deal.telefonnummer, deal.telefonnummer_2].filter(Boolean).join(' / ') || null },
-                { label: 'Bereich', value: deal.bereich },
+                { label: 'Adresse', value: deal.adresse },
+                { label: 'Rechtsform', value: deal.rechtsform },
                 { label: 'Interesse an', value: deal.interesse_an },
+                { label: 'Interesse (konkret)', value: deal.interesse_an_konkret },
+                { label: 'Kunde durch', value: deal.kunde_durch },
+                { label: 'Kundentyp', value: deal.kundentyp },
+                { label: 'Kategorie', value: deal.kategorie },
+                { label: 'Vermittler Nr.', value: deal.vermittler_nr },
                 { label: 'Deal-Besitzer', value: deal.deal_besitzer },
+                { label: 'Weitere Infos', value: deal.weitere_infos },
                 { label: 'Notizen', value: deal.notizen },
+                { label: 'Verlustgrund', value: deal.verlustgrund },
               ]
                 .filter((row) => row.value)
                 .map((row) => (
@@ -120,6 +128,47 @@ export default async function DealDetailPage({
                 ))}
             </div>
           </div>
+
+          {/* Bearbeitungsstatus pro Bereich */}
+          {(() => {
+            const statusFelder = [
+              { label: 'E&F', value: deal.status_ef },
+              { label: 'KI Hochschulen', value: deal.status_ki_hochschulen },
+              { label: 'WP', value: deal.status_wp },
+              { label: 'KI', value: deal.status_ki },
+              { label: 'IWS', value: deal.status_iws },
+              { label: 'GewerbeSach', value: deal.status_gewerbesach },
+              { label: 'Mitarbeiterempfehlung', value: deal.status_mitarbeiterempfehlung },
+              { label: 'mN Privat', value: deal.status_mn_privat },
+            ].filter((row) => row.value)
+
+            if (statusFelder.length === 0) return null
+
+            return (
+              <div
+                className="bg-white"
+                style={{ borderRadius: 'var(--r-md)', border: '1px solid var(--g100)' }}
+              >
+                <div className="px-5 py-3" style={{ borderBottom: '1px solid var(--g100)' }}>
+                  <h2 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--g400)' }}>
+                    Bearbeitungsstatus
+                  </h2>
+                </div>
+                <div className="divide-y" style={{ borderColor: 'var(--g50)' }}>
+                  {statusFelder.map((row) => (
+                    <div key={row.label} className="px-5 py-3 flex gap-4">
+                      <dt className="text-xs font-semibold shrink-0 w-32" style={{ color: 'var(--g400)' }}>
+                        {row.label}
+                      </dt>
+                      <dd className="text-sm" style={{ color: 'var(--g700)' }}>
+                        {row.value}
+                      </dd>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Comments */}
           <div
