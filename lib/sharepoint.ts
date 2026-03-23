@@ -140,34 +140,31 @@ const MOCK_DEALS: SharePointDeal[] = [
   },
 ]
 
-// --- Deals Cache (avoid fetching all items on every request) ---
-
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
-let dealsCache: { items: SharePointDeal[]; expiresAt: number } | null = null
+// --- Deals fetching with Next.js fetch cache ---
 
 async function getAllDeals(): Promise<SharePointDeal[]> {
-  if (dealsCache && Date.now() < dealsCache.expiresAt) {
-    return dealsCache.items
-  }
-
   const token = await getAppToken()
-  const client = getGraphClient(token)
 
   let allItems: SharePointDeal[] = []
-  let nextLink: string | undefined = `/sites/${SITE_ID}/lists/${LIST_ID}/items?$expand=fields&$top=200`
+  let url = `https://graph.microsoft.com/v1.0/sites/${SITE_ID}/lists/${LIST_ID}/items?$expand=fields&$top=200`
 
-  while (nextLink) {
-    const response = await client
-      .api(nextLink)
-      .header("Prefer", "HonorNonIndexedQueriesWarningMayFailRandomly")
-      .get()
+  while (url) {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Prefer: "HonorNonIndexedQueriesWarningMayFailRandomly",
+      },
+      next: { revalidate: 300 }, // cache for 5 minutes
+    })
 
-    const items = (response.value ?? []).map(mapItem)
+    if (!response.ok) break
+
+    const data = await response.json()
+    const items = (data.value ?? []).map(mapItem)
     allItems = allItems.concat(items)
-    nextLink = response["@odata.nextLink"]
+    url = data["@odata.nextLink"] ?? ""
   }
 
-  dealsCache = { items: allItems, expiresAt: Date.now() + CACHE_TTL }
   return allItems
 }
 
@@ -202,15 +199,17 @@ export async function getDealById(id: string): Promise<SharePointDeal | null> {
 
   // Fallback: direct API call for items not in cache
   const token = await getAppToken()
-  const client = getGraphClient(token)
 
   try {
-    const response = await client
-      .api(`/sites/${SITE_ID}/lists/${LIST_ID}/items/${id}`)
-      .expand("fields")
-      .get()
-
-    return mapItem(response)
+    const response = await fetch(
+      `https://graph.microsoft.com/v1.0/sites/${SITE_ID}/lists/${LIST_ID}/items/${id}?$expand=fields`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        next: { revalidate: 300 },
+      }
+    )
+    if (!response.ok) return null
+    return mapItem(await response.json())
   } catch {
     return null
   }
@@ -255,16 +254,23 @@ export async function getComments(dealId: string): Promise<DealComment[]> {
     return MOCK_COMMENTS[dealId] ?? []
   }
 
-  if (!PA_GET_COMMENTS_URL) return []
+  if (!PA_GET_COMMENTS_URL) {
+    console.error("POWER_AUTOMATE_GET_COMMENTS_URL is not set")
+    return []
+  }
 
   try {
     const res = await fetch(PA_GET_COMMENTS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ itemId: dealId }),
+      cache: "no-store",
     })
 
-    if (!res.ok) return []
+    if (!res.ok) {
+      console.error(`Get comments failed: ${res.status} ${await res.text().catch(() => '')}`)
+      return []
+    }
 
     const data = await res.json()
     // Power Automate returns array of SharePoint comments
@@ -322,7 +328,10 @@ export async function addComment(
     return true
   }
 
-  if (!PA_ADD_COMMENT_URL) return false
+  if (!PA_ADD_COMMENT_URL) {
+    console.error("POWER_AUTOMATE_ADD_COMMENT_URL is not set")
+    return false
+  }
 
   try {
     const res = await fetch(PA_ADD_COMMENT_URL, {
