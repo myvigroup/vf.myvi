@@ -37,6 +37,11 @@ export default async function AdminDashboardPage() {
     (d) => d.deal_status !== 'Gewonnen' && d.deal_status !== 'Verloren'
   ).length
 
+  // Count total registered berater
+  const { count: totalBerater } = await supabase
+    .from('users')
+    .select('*', { count: 'exact', head: true })
+
   const recentDeals = deals.slice(0, 10)
 
   const kpiCards = [
@@ -67,6 +72,13 @@ export default async function AdminDashboardPage() {
       color: '#B45309',
       bg: 'var(--warning-light)',
       icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      label: 'Registrierte Berater',
+      value: totalBerater ?? 0,
+      color: '#0E7490',
+      bg: 'var(--accent-light)',
+      icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
     },
   ]
 
