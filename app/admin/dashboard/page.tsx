@@ -12,7 +12,12 @@ const STATUS_BADGES: Record<string, { bg: string; color: string }> = {
 
 export default async function AdminDashboardPage() {
   const supabase = createAdminClient()
-  const deals = await getAllDealsAdmin()
+  const allDeals = await getAllDealsAdmin()
+
+  // Only count deals from registered berater
+  const { data: users } = await supabase.from('users').select('email')
+  const registeredEmails = new Set((users ?? []).map(u => u.email.toLowerCase()))
+  const deals = allDeals.filter(d => registeredEmails.has(d.Berater.toLowerCase()))
 
   // KPI calculations
   const totalDeals = deals.length
