@@ -32,18 +32,18 @@ export default function LoginPage() {
             className="leading-tight"
             style={{ fontSize: 36, fontWeight: 600, color: '#0a0d14' }}
           >
-            Deine Deals.<br />
-            Jederzeit im Blick.
+            Kontakte vergolden.<br />
+            Deals verfolgen.
           </h1>
-          <p className="mt-4" style={{ fontSize: 16, color: '#94a3b8' }}>
-            Das Berater-Dashboard für Value Factory Firmenkontakte
+          <p className="mt-4" style={{ fontSize: 16, color: '#64748b' }}>
+            Gib deine Firmenkontakte ins MYVI Netzwerk weiter und verfolge jeden Deal in Echtzeit.
           </p>
         </div>
 
         <div className="space-y-2.5">
           {[
-            'Alle eingereichten Deals auf einen Blick',
-            'Status-Updates in Echtzeit',
+            'Firmenkontakte einfach ins MYVI Netzwerk weitergeben',
+            'Jeden Deal-Status in Echtzeit verfolgen',
             'Direkte Kommunikation mit dem Firmenberater',
           ].map((text) => (
             <div key={text} className="flex items-center gap-2.5">
