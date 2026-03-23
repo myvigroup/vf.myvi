@@ -1,4 +1,3 @@
-import { Resend } from "resend"
 import { render } from "@react-email/components"
 import {
   DealConfirmationEmail,
@@ -6,8 +5,35 @@ import {
   ActivityNotificationEmail,
 } from "./templates"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.RESEND_FROM_EMAIL ?? "dialoge@myvi.de"
+const BREVO_API_KEY = process.env.BREVO_API_KEY
+const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? "dialoge@myvi.de"
+const FROM_NAME = "MYVI Dialog"
+
+async function sendEmail(to: string, subject: string, html: string) {
+  if (!BREVO_API_KEY) {
+    console.error("BREVO_API_KEY is not set")
+    return
+  }
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": BREVO_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: FROM_NAME, email: FROM_EMAIL },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  })
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "")
+    console.error(`Brevo email failed: ${res.status} ${text}`)
+  }
+}
 
 /**
  * MAIL 1: Bestätigung an den VF-Berater nach Deal-Einreichung
@@ -21,13 +47,11 @@ export async function sendDealConfirmation(
     const html = await render(
       DealConfirmationEmail({ firmaName, dealId })
     )
-
-    await resend.emails.send({
-      from: `MYVI Dialog <${FROM}>`,
-      to: beraterEmail,
-      subject: `✅ Dein Deal wurde eingereicht – ${firmaName}`,
-      html,
-    })
+    await sendEmail(
+      beraterEmail,
+      `Dein Deal wurde eingereicht – ${firmaName}`,
+      html
+    )
   } catch (error) {
     console.error("Email sendDealConfirmation failed:", error)
   }
@@ -47,13 +71,11 @@ export async function sendCommentNotificationToFB(
     const html = await render(
       CommentNotificationEmail({ beraterName, firmaName, kommentar, sharepointId })
     )
-
-    await resend.emails.send({
-      from: `MYVI Dialog <${FROM}>`,
-      to: fbEmail,
-      subject: `💬 Neuer Kommentar von ${beraterName} – ${firmaName}`,
-      html,
-    })
+    await sendEmail(
+      fbEmail,
+      `Neuer Kommentar von ${beraterName} – ${firmaName}`,
+      html
+    )
   } catch (error) {
     console.error("Email sendCommentNotificationToFB failed:", error)
   }
@@ -73,13 +95,11 @@ export async function sendActivityNotificationToBerater(
     const html = await render(
       ActivityNotificationEmail({ firmaName, beschreibung, dealId, dealStatus })
     )
-
-    await resend.emails.send({
-      from: `MYVI Dialog <${FROM}>`,
-      to: beraterEmail,
-      subject: `🔔 Update zu deinem Deal – ${firmaName}`,
-      html,
-    })
+    await sendEmail(
+      beraterEmail,
+      `Update zu deinem Deal – ${firmaName}`,
+      html
+    )
   } catch (error) {
     console.error("Email sendActivityNotificationToBerater failed:", error)
   }

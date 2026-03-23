@@ -1,10 +1,31 @@
-import { Resend } from 'resend'
+const BREVO_API_KEY = process.env.BREVO_API_KEY
+const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? 'dialoge@myvi.de'
+const FROM_NAME = 'Value Factory'
 
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY)
+async function sendEmail(to: string, subject: string, text: string) {
+  if (!BREVO_API_KEY) {
+    console.log('[E-Mail] Kein BREVO_API_KEY — E-Mail übersprungen:', { to, subject })
+    return
+  }
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": BREVO_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: FROM_NAME, email: FROM_EMAIL },
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+    }),
+  })
+
+  if (!res.ok) {
+    console.error(`Brevo email failed: ${res.status} ${await res.text().catch(() => '')}`)
+  }
 }
-
-const FROM_EMAIL = process.env.EMAIL_FROM ?? 'Value Factory <noreply@vf.myvi.de>'
 
 export async function sendStatusChangeEmail({
   to,
@@ -19,16 +40,10 @@ export async function sendStatusChangeEmail({
   oldStatus: string
   newStatus: string
 }) {
-  if (!process.env.RESEND_API_KEY) {
-    console.log('[E-Mail] Kein RESEND_API_KEY — E-Mail übersprungen:', { to, firmaName, newStatus })
-    return
-  }
-
-  await getResend().emails.send({
-    from: FROM_EMAIL,
+  await sendEmail(
     to,
-    subject: `Deal "${firmaName}" — Neuer Status: ${newStatus}`,
-    text: `Hallo ${beraterName},
+    `Deal "${firmaName}" — Neuer Status: ${newStatus}`,
+    `Hallo ${beraterName},
 
 der Status Ihres Deals "${firmaName}" wurde aktualisiert:
 
@@ -37,8 +52,8 @@ der Status Ihres Deals "${firmaName}" wurde aktualisiert:
 Schauen Sie im Dashboard nach:
 ${process.env.NEXT_PUBLIC_APP_URL}/dashboard
 
-Ihr Value Factory Team`,
-  })
+Ihr Value Factory Team`
+  )
 }
 
 export async function sendNewDealNotification({
@@ -54,16 +69,10 @@ export async function sendNewDealNotification({
   beraterName: string
   bereich: string
 }) {
-  if (!process.env.RESEND_API_KEY) {
-    console.log('[E-Mail] Kein RESEND_API_KEY — E-Mail übersprungen:', { to, firmaName })
-    return
-  }
-
-  await getResend().emails.send({
-    from: FROM_EMAIL,
+  await sendEmail(
     to,
-    subject: `Neuer Deal: "${firmaName}" von ${beraterName}`,
-    text: `Hallo ${firmenberaterName},
+    `Neuer Deal: "${firmaName}" von ${beraterName}`,
+    `Hallo ${firmenberaterName},
 
 ein neuer Deal wurde eingereicht:
 
@@ -73,6 +82,6 @@ ein neuer Deal wurde eingereicht:
 
 Bitte prüfen Sie den Deal in der SharePoint-Liste.
 
-Ihr Value Factory System`,
-  })
+Ihr Value Factory System`
+  )
 }
