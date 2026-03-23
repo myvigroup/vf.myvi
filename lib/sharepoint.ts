@@ -227,12 +227,14 @@ const MOCK_COMMENTS: Record<string, DealComment[]> = {
       author: "Mario Schulze",
       text: "@Max Wolf: Termin liegt kommenden Montag um 13:00 Uhr",
       createdAt: "2026-03-18T15:33:00Z",
+      isVFBerater: false,
     },
     {
       id: "c2",
       author: "Bastian Friede",
       text: "@Mario Schulze - alles klar, bin dabei",
       createdAt: "2026-03-18T10:44:00Z",
+      isVFBerater: false,
     },
   ],
   "4": [
@@ -241,6 +243,7 @@ const MOCK_COMMENTS: Record<string, DealComment[]> = {
       author: "Sandra Klein",
       text: "Angebot wurde an den Inhaber verschickt. Warte auf Rückmeldung.",
       createdAt: "2026-03-20T14:15:00Z",
+      isVFBerater: false,
     },
   ],
 }
@@ -287,12 +290,18 @@ export async function getComments(dealId: string): Promise<DealComment[]> {
           return c.mentions?.[parseInt(idx)]?.name ? `@${c.mentions[parseInt(idx)].name}` : match
         })
 
-      // Extract author from "[Name]: text" prefix if present
-      let author = c.author?.name ?? "Unbekannt"
+      // Determine if this comment was written via VF Dashboard (author is "Automation")
+      const rawAuthor = c.author?.name ?? "Unbekannt"
+      const isFromDashboard = rawAuthor.toLowerCase() === "automation"
+
+      // Extract author from "[Name]: text" prefix if present (VF Berater comments)
+      let author = rawAuthor
       const prefixMatch = text.match(/^\[([^\]]+)\]:\s*/)
       if (prefixMatch) {
         author = prefixMatch[1]
         text = text.slice(prefixMatch[0].length)
+      } else if (isFromDashboard) {
+        author = "VF Berater"
       }
 
       return {
@@ -300,6 +309,7 @@ export async function getComments(dealId: string): Promise<DealComment[]> {
         author,
         text,
         createdAt: c.createdDate ?? c.createdAt ?? "",
+        isVFBerater: isFromDashboard,
       }
     })
   } catch {
@@ -323,6 +333,7 @@ export async function addComment(
       author: beraterName,
       text,
       createdAt: new Date().toISOString(),
+      isVFBerater: true,
     })
     MOCK_COMMENTS[dealId] = comments
     return true

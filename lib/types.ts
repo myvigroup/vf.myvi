@@ -18,4 +18,5 @@ export interface DealComment {
   author: string             // Display name
   text: string
   createdAt: string          // ISO date
+  isVFBerater: boolean       // true if written from VF Dashboard
 }

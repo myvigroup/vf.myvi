@@ -109,16 +109,38 @@ export default async function DealDetailContent({ id }: { id: string }) {
         {comments.length > 0 ? (
           <div>
             {comments.map((comment) => (
-              <div key={comment.id} className="px-5 py-3.5 flex gap-3" style={{ borderBottom: '1px solid var(--g50)' }}>
+              <div
+                key={comment.id}
+                className="px-5 py-3.5 flex gap-3"
+                style={{
+                  borderBottom: '1px solid var(--g50)',
+                  background: comment.isVFBerater ? 'var(--primary-light)' : 'transparent',
+                }}
+              >
                 <div
                   className="flex items-center justify-center rounded-full text-white text-xs font-bold shrink-0"
-                  style={{ width: 32, height: 32, background: 'var(--accent)', marginTop: 2 }}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    background: comment.isVFBerater ? 'var(--primary)' : 'var(--accent)',
+                    marginTop: 2,
+                  }}
                 >
                   {comment.author.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className="text-sm font-semibold" style={{ color: 'var(--g800)' }}>{comment.author}</span>
+                    <span className="text-sm font-semibold" style={{ color: 'var(--g800)' }}>
+                      {comment.author}
+                    </span>
+                    {comment.isVFBerater && (
+                      <span
+                        className="text-[0.62rem] font-bold px-1.5 py-0.5 rounded"
+                        style={{ background: 'var(--primary)', color: 'white' }}
+                      >
+                        VF Berater
+                      </span>
+                    )}
                     <span className="text-[0.68rem]" style={{ color: 'var(--g400)' }}>
                       {new Date(comment.createdAt).toLocaleDateString('de-DE', {
                         day: '2-digit', month: '2-digit', year: 'numeric',
