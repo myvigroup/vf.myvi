@@ -6,7 +6,7 @@ import {
 } from "./templates"
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY
-const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? "dialoge@myvi.de"
+const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? "digitalmarketing@myvi.de"
 const FROM_NAME = "MYVI Dialog"
 
 async function sendEmail(to: string, subject: string, html: string) {

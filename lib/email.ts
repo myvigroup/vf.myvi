@@ -1,6 +1,6 @@
 const BREVO_API_KEY = process.env.BREVO_API_KEY
-const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? 'dialoge@myvi.de'
-const FROM_NAME = 'Value Factory'
+const FROM_EMAIL = process.env.BREVO_FROM_EMAIL ?? 'digitalmarketing@myvi.de'
+const FROM_NAME = 'MYVI Dialog'
 
 async function sendEmail(to: string, subject: string, text: string) {
   if (!BREVO_API_KEY) {
@@ -52,7 +52,7 @@ der Status Ihres Deals "${firmaName}" wurde aktualisiert:
 Schauen Sie im Dashboard nach:
 ${process.env.NEXT_PUBLIC_APP_URL}/dashboard
 
-Ihr Value Factory Team`
+Ihr MYVI Team`
   )
 }
 
@@ -82,6 +82,6 @@ ein neuer Deal wurde eingereicht:
 
 Bitte prüfen Sie den Deal in der SharePoint-Liste.
 
-Ihr Value Factory System`
+Ihr MYVI Team`
   )
 }

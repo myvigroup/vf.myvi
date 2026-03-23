@@ -27,7 +27,7 @@ function Layout({ children, footer }: { children: React.ReactNode; footer: strin
           <Section style={{ marginBottom: 32 }}>
             <Img
               src={`${APP_URL}/logo.png`}
-              alt="Value Factory"
+              alt="MYVI Dialog"
               height={28}
               style={{ marginBottom: 16 }}
             />
@@ -110,7 +110,7 @@ export function DealConfirmationEmail({
   dealId: string
 }) {
   return (
-    <Layout footer="MYVI Dialog · Value Factory Berater-Portal">
+    <Layout footer="MYVI Dialog · MYVI Dialog Berater-Portal">
       <Text style={{ fontSize: 20, fontWeight: 600, color: TEXT_COLOR, margin: "0 0 8px" }}>
         Deal eingereicht
       </Text>
@@ -184,7 +184,7 @@ export function ActivityNotificationEmail({
   dealStatus: string
 }) {
   return (
-    <Layout footer="MYVI Dialog · Value Factory Berater-Portal">
+    <Layout footer="MYVI Dialog · MYVI Dialog Berater-Portal">
       <Text style={{ fontSize: 20, fontWeight: 600, color: TEXT_COLOR, margin: "0 0 8px" }}>
         Update zu deinem Deal
       </Text>
