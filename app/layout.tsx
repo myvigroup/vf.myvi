@@ -5,7 +5,7 @@ import { getBrand } from "@/lib/branding";
 export async function generateMetadata(): Promise<Metadata> {
   const brand = await getBrand()
   return {
-    title: brand.name === 'mitNORM' ? 'mitNORM Dialoge' : 'Value Factory',
+    title: brand.name === 'mitNORM' ? 'MYVI Dialoge' : 'Value Factory',
     description: `Berater-Dashboard für ${brand.name} Firmenkontakte`,
   }
 }
