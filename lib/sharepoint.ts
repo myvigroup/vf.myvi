@@ -159,7 +159,10 @@ async function fetchAllDealsFromSharePoint(): Promise<SharePointDeal[]> {
       cache: "no-store",
     })
 
-    if (!response.ok) break
+    if (!response.ok) {
+      console.error(`SharePoint fetch failed: ${response.status}`)
+      break
+    }
 
     const data = await response.json()
     const items = (data.value ?? []).map(mapItem)
@@ -167,14 +170,33 @@ async function fetchAllDealsFromSharePoint(): Promise<SharePointDeal[]> {
     url = data["@odata.nextLink"] ?? ""
   }
 
+  // Don't cache empty results (likely an error)
+  if (allItems.length === 0) {
+    throw new Error("No deals fetched from SharePoint - skipping cache")
+  }
+
   return allItems
 }
 
-export const getAllDeals = unstable_cache(
-  fetchAllDealsFromSharePoint,
-  ["sharepoint-deals"],
-  { revalidate: 300 } // cache for 5 minutes
-)
+async function getAllDealsWithFallback(): Promise<SharePointDeal[]> {
+  try {
+    return await unstable_cache(
+      fetchAllDealsFromSharePoint,
+      ["sharepoint-deals"],
+      { revalidate: 300 }
+    )()
+  } catch {
+    // If cache throws (e.g. empty result), try direct fetch
+    try {
+      return await fetchAllDealsFromSharePoint()
+    } catch {
+      console.error("SharePoint fetch failed completely")
+      return []
+    }
+  }
+}
+
+export const getAllDeals = getAllDealsWithFallback
 
 /**
  * Returns all deals from SharePoint (or mock data in dev).
