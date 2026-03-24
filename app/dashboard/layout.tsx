@@ -1,15 +1,18 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import DashboardNav from './nav'
+import { getBrand } from '@/lib/branding'
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const brand = await getBrand()
+
   return (
     <div className="min-h-full">
-      {/* Header — static shell renders immediately */}
+      {/* Header */}
       <nav
         className="sticky top-0 z-50 bg-white"
         style={{ borderBottom: '1px solid var(--g200)', height: 56 }}
@@ -17,7 +20,7 @@ export default function DashboardLayout({
         <div className="mx-auto max-w-[1400px] h-full flex items-center justify-between px-6">
           <div className="flex items-center gap-5">
             <Link href="/dashboard" className="flex items-center">
-              <img src="/logo.png" alt="Value Factory" style={{ height: 28 }} />
+              <img src={brand.logo} alt={brand.name} style={{ height: brand.logoHeight }} />
             </Link>
             <div
               className="hidden sm:block"
@@ -34,7 +37,6 @@ export default function DashboardLayout({
         </div>
       </nav>
 
-      {/* Content — renders immediately, children use their own Suspense */}
       <main className="mx-auto max-w-[1400px] px-6 py-5">
         {children}
       </main>
