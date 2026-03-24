@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { getBrand } from "@/lib/branding";
 
-export const metadata: Metadata = {
-  title: "Value Factory",
-  description: "Berater-Dashboard für Firmenkontakte",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const brand = await getBrand()
+  return {
+    title: brand.name === 'mitNORM' ? 'mitNORM Dialoge' : 'Value Factory',
+    description: `Berater-Dashboard für ${brand.name} Firmenkontakte`,
+  }
+}
 
 export default function RootLayout({
   children,
