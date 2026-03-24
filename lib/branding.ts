@@ -37,8 +37,8 @@ const BRANDS: Record<string, Brand> = {
   mitnorm: {
     key: 'mitnorm',
     name: 'mitNORM',
-    logo: '/logo-mitnorm.png',
-    logoHeight: 32,
+    logo: '/logo.png',
+    logoHeight: 28,
     primary: '#0B3D6B',
     primaryDark: '#082D4F',
     primaryLight: '#E8EFF6',
